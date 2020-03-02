@@ -1,5 +1,5 @@
 #include <AFMotor.h> // Подключаем библиотеку для работы с шилдом 
-#include <NewPing.h>
+//#include <NewPing.h>
 
 
 #define BUZZER 9
@@ -11,8 +11,7 @@
 AF_DCMotor motor3(3); // Подключаем моторы к клеммникам M3
 AF_DCMotor motor4(4); // Подключаем моторы к клеммникам M4
 
-
-NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE);
+//#NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE);
 
 
 bool automode = false;
@@ -75,6 +74,7 @@ void setup() {
   Serial.begin(9600);
   Serial.println("Starting...");
   Serial.println("Fibot is ready");
+  demo();
   tone(BUZZER, 1000, 1000);  // Noise
 }
 
