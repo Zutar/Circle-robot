@@ -10,6 +10,8 @@ target 'controller' do
 
   pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
 
+  pod 'react-native-ble-plx', :path => '../node_modules/react-native-ble-plx'
+
   target 'controllerTests' do
     inherit! :complete
     # Pods for testing

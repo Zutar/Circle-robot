@@ -56,6 +56,7 @@
 	<key>UIAppFonts</key>
 	<array>
 		<string>Jokerman.ttf</string>
+		<string>CenturyGothic.ttf</string>
 	</array>
 </dict>
 </plist>
