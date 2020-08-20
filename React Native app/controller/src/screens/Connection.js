@@ -1,10 +1,10 @@
 /* eslint-disable prettier/prettier */
 import React, {Component} from 'react';
-import {StyleSheet, View } from 'react-native';
+import {StyleSheet, View, TouchableWithoutFeedback, findNodeHandle} from 'react-native';
+import {requestLocationPermission} from '../functions/requestLocationPermission';
+import BluetoothSerial from 'react-native-bluetooth-serial-next';
 
-import {BleManager} from 'react-native-ble-plx';
 
-const DeviceManager = new BleManager();
 
 
 import {BackgroundImage} from '../components/backgroundImage';
@@ -17,51 +17,43 @@ export class Connection extends Component {
     enable: false,
   }
 
-  getDeviceList(){
-    const subscription = DeviceManager.onStateChange((state) => {
-      if (state === 'PoweredOn') {
-        DeviceManager.startDeviceScan(null, null, (error, device) => {
-          if (error) {
-            console.log('error',error);
-          }
+ async getDeviceList(){
+    const permission = requestLocationPermission();
+    if (!permission) {return;}
+    const status = await BluetoothSerial.isEnabled();
 
-          this.setState({enable: true});
+    if (status){
+      this.setState({enable: true}); // Show DeviceList
+      const devices = await BluetoothSerial.listUnpaired();
+      this.setState({deviceArray: devices});
+      console.log(devices);
+    } else {
+      await BluetoothSerial.requestEnable();
+    }
+  }
 
-          if (device !== null && device.name !== null) {
-            // Check for similar id in device array
-            let isSet = false;
-            let deviceArray = this.state.deviceArray;
-            for (let i = 0; i < deviceArray.length; i++){
-              if (deviceArray[i].id === device.id){
-                isSet = true;
-                break;
-              }
-            }
-
-            if (!isSet){
-              //console.log('device found ----> [id,name]', device.id, device.name);
-
-              this.setState((s) => ({
-                enable: true,
-                deviceArray: s.deviceArray.concat(device),
-              }));
-              console.log(this.state.deviceArray.length);
-            }
-          }
-        });
-        subscription.remove();
-      }
-  }, true);
+  async hideDeviceList(event){
+    const elementHandle = findNodeHandle(this.refs.bg);
+    if (event.nativeEvent.target === elementHandle){
+      await BluetoothSerial.cancelDiscovery();
+      this.setState({
+        enable: false,
+        deviceArray: []
+      });
+    }
   }
 
   render() {
     let deviceArray = this.state.deviceArray;
+
     return (
       <BackgroundImage>
-        <View style={styles.container}>
-          <RoundButton click={this.getDeviceList.bind(this)} />
-          {this.state.enable ? <DeviceList list={deviceArray}/> : null}
-        </View>
+        <TouchableWithoutFeedback onPress={this.hideDeviceList.bind(this)}>
+          <View ref="bg" style={styles.container}>
+            {!this.state.enable ? <RoundButton click={this.getDeviceList.bind(this)} /> : null}
+            {this.state.enable ? <DeviceList list={deviceArray} navigation={this.props.navigation}/> : null}
+          </View>
+        </TouchableWithoutFeedback>
       </BackgroundImage>
     );
   }

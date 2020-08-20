@@ -74,14 +74,14 @@ void setup() {
   Serial.begin(9600);
   Serial.println("Starting...");
   Serial.println("Fibot is ready");
-  demo();
+  //demo();
   tone(BUZZER, 1000, 1000);  // Noise
 }
 
 void loop() {
 while(Serial.available() > 0){
   char data = Serial.read();
-  
+  Serial.println(data);
   switch(data){
     case 'a':
       automode = !automode;
@@ -116,11 +116,11 @@ while(Serial.available() > 0){
 
 
 
-motor3.run(FORWARD);  // Задаем движение вперед
-motor3.setSpeed(255); // Задаем скорость движения
+//motor3.run(FORWARD);  // Задаем движение вперед
+//motor3.setSpeed(255); // Задаем скорость движения
 
-motor4.run(FORWARD);  // Задаем движение вперед
-motor4.setSpeed(255); // Задаем скорость движения
+//motor4.run(FORWARD);  // Задаем движение вперед
+//motor4.setSpeed(255); // Задаем скорость движения
 
 delay(5000);
 }
