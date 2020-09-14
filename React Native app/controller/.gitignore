@@ -33,7 +33,7 @@ local.properties
 node_modules/
 npm-debug.log
 yarn-error.log
-!react-native-axis-pad
+!/node_modules/react-native-axis-pad
 
 # BUCK
 buck-out/
