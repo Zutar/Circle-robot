@@ -15,6 +15,7 @@
     "@react-navigation/stack": "^5.7.0",
     "react": "16.13.1",
     "react-native": "0.63.2",
+    "react-native-android-location-enabler": "^1.2.1",
     "react-native-axis-pad": "^0.9.2",
     "react-native-bluetooth-serial-next": "^1.2.3",
     "react-native-gamepad-controller": "^0.1.0",

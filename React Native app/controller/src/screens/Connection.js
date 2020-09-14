@@ -1,10 +1,9 @@
 /* eslint-disable prettier/prettier */
 import React, {Component} from 'react';
-import {StyleSheet, View, TouchableWithoutFeedback, findNodeHandle} from 'react-native';
+import {StyleSheet, View, TouchableWithoutFeedback, findNodeHandle, Platform} from 'react-native';
 import {requestLocationPermission} from '../functions/requestLocationPermission';
 import BluetoothSerial from 'react-native-bluetooth-serial-next';
-
-
+import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 
 
 import {BackgroundImage} from '../components/backgroundImage';
@@ -20,6 +19,16 @@ export class Connection extends Component {
  async getDeviceList(){
     const permission = requestLocationPermission();
     if (!permission) {return;}
+
+    if (Platform.Version >= 29) {
+      RNAndroidLocationEnabler.promptForEnableLocationIfNeeded({interval: 10000, fastInterval: 5000})
+      .then(data => {
+        console.log(`DATA: ${data}`);
+      }).catch(err => {
+        console.log(`ERROR: ${err}`);
+      });
+    }
+
     const status = await BluetoothSerial.isEnabled();
 
     if (status){
@@ -38,7 +47,7 @@ export class Connection extends Component {
       await BluetoothSerial.cancelDiscovery();
       this.setState({
         enable: false,
-        deviceArray: []
+        deviceArray: [],
       });
     }
   }
