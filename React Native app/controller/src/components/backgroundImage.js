@@ -9,6 +9,7 @@ export class BackgroundImage extends Component{
             style={styles.bgBlock}
             source={require('../assets/images/bg.png')} >
                 {this.props.children}
+                <Text>Power by</Text>
             </ImageBackground>
         );
     }

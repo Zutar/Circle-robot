@@ -31,26 +31,31 @@ class DeviceListItem extends Component {
   async connectToDevice(){
     if(this.state.pairing) return;
 
-    this.setState({pairing: true});
-    const id = this.props.device.id;
-    const devices = await BluetoothSerial.list();
-    const found = devices.find(d => d.id === id);
+    if(BluetoothSerial.isConnected()){
+      this.setState({pairing: false});
+      this.props.navigation.navigate('Controller', {id: id});
+    }else{
+      this.setState({pairing: true});
+      const id = this.props.device.id;
+      const devices = await BluetoothSerial.list();
+      const found = devices.find(d => d.id === id);
 
-    if(!found){
-      const device = await BluetoothSerial.pairDevice(id);
-      console.log(device);
-      if(!device){
-        Alert.alert(
-          'Ошибка!',
-          'Ошибка при подключении к устройству!'
-       );
+      if(!found){
+        const device = await BluetoothSerial.pairDevice(id);
+        console.log(device);
+        if(!device){
+          Alert.alert(
+            'Ошибка!',
+            'Ошибка при подключении к устройству!'
+        );
+        }
       }
-    }
 
-    const connected = await BluetoothSerial.device(id).connect();
-    console.log(connected);
-    this.setState({pairing: false});
-    this.props.navigation.navigate('Controller', {id: id});
+      const connected = await BluetoothSerial.device(id).connect();
+      console.log(connected);
+      this.setState({pairing: false});
+      this.props.navigation.navigate('Controller', {id: id});
+    }
   }
 
   render(){
