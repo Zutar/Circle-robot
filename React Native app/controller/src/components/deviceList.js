@@ -15,7 +15,7 @@ export class DeviceList extends Component{
           <View style={styles.scrollBlock}>
             {(list.length <= 0 && <ActivityIndicator style={styles.mainIndicator} size="large" color="#494949" />)}
             {
-              list.map((el) => (el && <DeviceListItem device={el} navigation={navigation} key={el.id}/>))
+              list.map((el) => (el && el.id != 0 && <DeviceListItem device={el} navigation={navigation} key={el.id}/>))
             }
           </View>
         </ScrollView>
@@ -30,13 +30,13 @@ class DeviceListItem extends Component {
   }
   async connectToDevice(){
     if(this.state.pairing) return;
+    const id = this.props.device.id;
 
     if(BluetoothSerial.isConnected()){
       this.setState({pairing: false});
       this.props.navigation.navigate('Controller', {id: id});
     }else{
       this.setState({pairing: true});
-      const id = this.props.device.id;
       const devices = await BluetoothSerial.list();
       const found = devices.find(d => d.id === id);
 

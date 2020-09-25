@@ -26,6 +26,7 @@ export class Connection extends Component {
         console.log(`DATA: ${data}`);
       }).catch(err => {
         console.log(`ERROR: ${err}`);
+        return;
       });
     }
 

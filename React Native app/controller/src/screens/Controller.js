@@ -71,6 +71,11 @@ export class Controller extends Component {
         <Text style={styles.logo}>{'Circle \n Robot'}</Text>
         <Text style={{color: 'white'}}>{'Статус: '}
           <Text style={connectionState ? styles.sConnect : styles.sDisconnect}>{connectionState ? 'Подключён' : 'Отключён'}</Text>
+          {!connectionState &&  
+            <TouchableOpacity style={styles.backButton}>
+              <Text>Back</Text>
+          </TouchableOpacity>
+          }
         </Text>
       </View>
 
@@ -157,4 +162,8 @@ const styles = StyleSheet.create({
     maxWidth: Dimensions.get('window').width * 0.9,
     marginTop: Dimensions.get('window').height * 0.1,
   },
+  backButton: {
+    flexWrap: 'wrap',
+    fontSize: 32
+  }
 });
